@@ -1,0 +1,47 @@
+---
+title: "Adele and R"
+output:
+  html_document: default
+  pdf_document: default
+---
+**WEEK 2**
+Reading data files into R
+
+```{r Week 2 import}
+#getwd(): To know where we are in the comput
+  #From csv: dat <- read.csv("Name.csv", header=TRUE) (=FALSE si pas de titres)
+  #From csv on website: 
+    #dat <- read.csv("http://mgimond.github.io/ES218/Data/ACS.csv", header=TRUE)
+  #From R data file : dat<- readRDS("Name.rds")
+  #From website with decompressor function: dat <- readRDS(gzcon(url("http://mgimond.github.io/ES218/Data/ACS.rds")))
+  #From excel: 
+    #install.packages("readxl")
+    #library(readxl)
+     #In the folder "Data", then "R Adele" the file is called "Discharge_2004_2014"
+     #xl <- read_excel("R Adele/Data/Discharge_2004_2014.xlsx", sheet = "Discharge")
+  #from excel on web site:
+    #web.file <- "http://mgimond.github.io/ES218/Data/Discharge_2004_2014.xlsx"
+    #tmp      <- tempfile(fileext=".xlsx")
+    #download.file(web.file,destfile=tmp, mode="wb")
+    #xl       <-  read_excel(tmp, sheet = "Discharge")
+  #from SAS (XPT format), SPSS (SAV format) and Stata (dta format). with the package "Hmisc" and the function "saxport.get"
+
+```
+Cas concret papillons
+
+```{r Week 2 exemple}
+#On a un tableau excel sous format csv
+dat <- read.csv("R Adele/Data/UKBMS_100/ukbms_count.csv", header=TRUE)
+str(dat)
+
+```
+
+Export from R
+```{r Week 2 export}
+#As Csv: 
+  #write.csv(dat, "./R Adele/output/donnees.csv")
+  #On exporte l'element dat dans le fichier output et on le nomme "donnees"
+#As RDs:saveRDS(dat.sub, "./R Adele/output.rds")
+#Saving a R session: save(list = ls(), file = "./R Adele/output/name.Rdata") 
+  #on peut ne sauvegarder que certains objets : save(list = c(dat, xl), file = "../Data/nom.Rdata")
+#load a session: load("./R Adele/Data/nom_session.Rdata")

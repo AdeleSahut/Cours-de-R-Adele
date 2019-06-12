@@ -1,0 +1,76 @@
+---
+title: "Week 2- date"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+Mega important: pour bien commencer dans "documents" et pas n'importe quel fichier, on fait le block suivant:
+```{r}
+require("knitr")
+opts_knit$set(root.dir = "C:/Users/retoschm/Documents")
+```
+Reading data files into R
+```{r dates manip}
+#date= object class
+library(lubridate)
+x<- c("08/10/1996","04/07/1961","29/11/1968")
+x.date<-dmy(x) #pour day/month/years, on peut intervertir
+#on peut aussi preciser time zone, syst.geoloc... avec dmy(x, tz=EST...)
+#Pour connaitre les tz dans R, on utilise OlsonNames()
+#Manipuler des heures:
+  #x <- c("06/23/2013 03:45:23", "07/30/2013 14:23:00", "08/12/2014 18:01:59")
+  #x.date <- mdy_hms(x, tz="EST") pour hour:minut:second, on peut garder h, hm...
+
+
+x.africa<- dmy(x, tz="Africa/Johannesburg")
+x.africa
+class(x)
+class(x.date)
+class(x.africa)
+```
+
+**Cas concret papillons** - Former et extraire des dates ou elements de dates
+```{r manip}
+dat <- read.csv("./R Adele/Data/UKBMS_100/ukbms_count.csv", header=TRUE)
+str(dat)
+#dat est un data frame avec des colonnes year, month, day, qu'on veux rassembler
+  dat.datec <- paste(dat$day,dat$month, dat$year, sep="-") #on colle les contenus des colonnes
+  str(dat.datec) #On obtient des dates sous forme de caracteres
+  dat.date <-dmy(dat.datec)
+  str(dat.date) #On obtient les dates sous forme de dates
+  dat$Dates<-(dat.date) #Rajouter la colonne "Dates" au tableau
+  head(dat)
+  write.csv(dat, "./R Adele/output/tableau dates.csv") #exporter tableau dans fichiers
+  
+  ##Rmq: si on travaille avec des horaires separes par ":"
+    #hrmin <- 712           # Time 7:12
+    #date  <- "2018/03/17"  # Date, on ne peux pas les coller direct entre eux
+    #library(stringr)
+    #ymd_hm(paste(date, str_pad(hrmin, width=4, pad="0")))
+        #avec 4 facteurs (2 pour H, 2 pour min, on met 0 sec)
+
+###Extraire des elements de dates
+  day(dmy("08/10/1996")) #Obtenir la date du jour
+  yday(dmy("08/10/1996"))  #obtenir le numero du jour dans l'annee
+  #il existe hour(), minute(), day(), yday(), decimal_date(), month(), year(), tz()
+  
+```
+
+**Cas concret papillons** - Operations sur les dates
+```{r}
+#fonction wday(Dates, Label=TRUE) extrait le jour de la semaine auquel correspond une date (en chiffre si on enleve le label)
+#Calculer la distance entre deux dates
+(dat$Dates[1]-dat$Dates[6])/ddays()  #en nombre de jours
+(dat$Dates[1]-dat$Dates[6])/dweeks() #en nombre de semaines
+#on peut avoir la distance en dminutes(), dYear()
+
+##Savoir quels elements d'une liste ont leur jour compris entre 11 et 24
+head((mday(dat$Dates) > 11) & (mday(dat$Dates) < 24))
+##Extraire certaines dates repondant a des conditions 
+dat$Dates[(day(dat$Dates)>8)&(day(dat$Dates)<10)]
+##Presenter les dates sous forme caractere
+head(as.character(dat$Dates, format="%B %Y"))
+#Il y a des raccourcis pour tous les elements de date, ici mois en lettres et annee
+
+```

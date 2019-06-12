@@ -1,0 +1,38 @@
+---
+title: "Manipulating Data tables with dplyr"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+setwd("C:/Users/retoschm/Documents/R Adele")
+
+```
+
+DPLYR
+```{r exploring and cleaning}
+library(plyr)
+dat<-read.csv("./Data/UKBMS_100/ukbms_count.csv", header=TRUE)
+datFAO<-read.csv("./Data/FAO_grains_NA.csv", header=TRUE)
+#obtenir des infos sur le Dataframe: str(), dim(), names(), head(), summary(), tail(dat, n=5) pour avoir les 5 dernieres lignes
+#fonctions dplyr:
+  #filter(dat, contrainte(s))-------Garder des lignes selon caracteristique
+  #arrange(dat, colonne)------------Trier le tableau en fonction d'une colonne
+  #select(dat,col1,col2)------------ne garde que ces colonnes
+  #select(dat,-col1,-col2)----------garde tout sauf ces colonnes
+  #mutate(dat,colx= ifelse(conditions,"nom", "nom sinon"))--Creer une colonne selon autres
+  #rename()---------------Renommer une colonne
+  #mutate_at(); modifier certaines valeurs dans certaines colonnes
+  #Summarise(dat,col1=x(dat), col2=y(dat))----Recree un dataframe avec des elements du premier
+dat1<-filter(dat, species_name== "Anthocharis cardamines"| species_name=="Lasiommata megera ") #rappel: |= "Or"
+summary(dat1)
+#Avec filter on peut rajouter autant de contraintes qu'on veux sur differentes colonnes a la foi en separant les attributs de chaque colonne par une virgule dans la fonction
+dat2<- mutate(dat, couleur_papillon=ifelse(species_name=="Maniola jurtina", "orange", "bleu"))
+head(dat2)
+dat3<- summarise(dat,ymin=min(year),ymax=max(year))
+dat3
+#Utilisation du %>% ----- Permet de mettre plusieurs operations d'un coup, pas besoin de repeter le dat dans les arguments a chaque fois, on le met juste au tout debut
+datfinal<- dat %>% filter(year==1990|year==1998) %>% select(-day,-month)
+summary(datfinal)
+```
+

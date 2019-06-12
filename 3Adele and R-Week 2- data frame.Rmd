@@ -1,0 +1,36 @@
+---
+title: "Adele and R - Week 2 - dataframe"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r dataFrame}
+dat<-read.csv("./R Adele/Data/UKBMS_100/ukbms_count.csv", header = TRUE)
+dim(dat) #number of rows and columns
+names(dat) #renvoie le nom des colonnes
+tail(dat,n=6) #Renvoie les 6 dernieres lignes
+str(dat) #permet de connaitre les types de variables
+summary(dat)
+##Creer un data Frame avec moins de colonnes
+  #dat1<-dat[,nom de colonnes a garder ou changement effectue]
+dat1<- dat[, !names(dat) %in% c("year","month")]
+#le ! pour on ne garde pas, le %in% pour ce aui est commun entre les names et les titres cites
+##Creer une colonne
+ dat1$col<-5
+
+```
+
+GESTION NA
+```{r operator}
+#And: &, Or: |, Not: !
+#pour fouiller si on a des NA dans un jeu de donnees, on tape is.na(dat) et on obtient des TRUE/FALSE
+#On peut modifier des valeurs dans un tableau en bidouillant, ex:
+ dat1$butterfly_count[dat1$butterfly_count==1]<-NA #change tous les 1 en NA dans cette colonne
+#Si on a des valeurs missing c'est utile pour remplacer les 999 en NA, ou pour les valeurs abberantes
+#la fonction na.omit(dat) supprime les lignes avec des NA
+#Au contraire, pour garder seulement les lignes avec annee NA, on fait dat[is.na(dat$year),] 
+```

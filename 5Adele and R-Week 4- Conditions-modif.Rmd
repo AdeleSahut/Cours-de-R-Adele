@@ -1,0 +1,32 @@
+---
+title: "Conditions/modifications dataframe"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+getwd()
+library(plyr)
+dat<-read.csv("./Data/UKBMS_100/ukbms_count.csv", header=TRUE)
+
+#Ifelse(condition, resultat si respectee, resultat sinon)
+presence<- ifelse(dat$species_name=="Anthocharis cardamines", "Yes","No")
+str(presence)
+#le if_else de plyr permet d'utiliser la fonction avec des dates, des logiques
+#recode(): Changer les noms dans un vecteur, un data frame...
+  x<-as.factor(c("a","b","c"))
+  recode(x,"a"="coucou", "b"="hibou")
+  
+  
+#case_when: comme ifelse mais avec plus de conditions
+unit<-c("F","C","K")
+temp<-c(10, 20, 30)
+case_when(unit == "F" ~ temp,
+          unit == "C" ~ (temp * 9/5) + 32,
+          TRUE ~ (temp - 273.15) * 9/5 + 32) #le TRUE prend toutes les conditions pas satisfaites
+
+
+```
+
+
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

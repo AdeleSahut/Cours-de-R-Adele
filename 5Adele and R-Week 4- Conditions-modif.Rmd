@@ -5,7 +5,7 @@ output: html_document
 
 ```{r setup, include=FALSE}
 getwd()
-library(plyr)
+library(dplyr)
 dat<-read.csv("./Data/UKBMS_100/ukbms_count.csv", header=TRUE)
 
 #Ifelse(condition, resultat si respectee, resultat sinon)
